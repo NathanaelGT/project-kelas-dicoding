@@ -7,8 +7,35 @@
  * - Memiliki method `listItems` untuk mengembalikan string yang merupakan informasi detail barang (dipanggil dari fungs `item.displayDetails()`).
  */
 
-class Inventory {}
+class Inventory {
+  /**
+   * @param {import('./Item.js').default[]} [items]
+   */
+  constructor(items = []) {
+    this.items = items;
+  }
 
+  /**
+   * @param {import('./Item.js').default} item
+   */
+  addItem(item) {
+    this.items.push(item);
+  }
+
+  /**
+   * @param {number} id
+   */
+  removeItem(id) {
+    this.items = this.items.filter(item => item.id !== id);
+  }
+
+  /**
+   * @returns {string}
+   */
+  listItems() {
+    return this.items.map(item => item.displayDetails()).join('\n');
+  }
+}
 
 // Jangan hapus kode di bawah ini!
 export default Inventory;
