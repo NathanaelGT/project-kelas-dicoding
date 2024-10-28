@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node src/index.js",
+    "dev": "node --watch src/index.js",
+    "lint": "eslint ./"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^21.3.12",
+    "cross-env": "^7.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^9.13.0",
+    "eslint-config-dicodingacademy": "^0.9.4"
+  }
+}
