@@ -22,9 +22,27 @@ export const books = {
     }
   }),
 
-  all: handler((response) => {
+  all: handler((response, request) => {
+    const { name, reading, finished } = request.query;
+    let { books } = db;
+
+    if (typeof name === 'string' && name) {
+      const lcName = name.toLowerCase();
+      books = books.filter((book) => {
+        return book.name.toLowerCase().includes(lcName);
+      });
+    }
+
+    if (['0', '1'].includes(reading)) {
+      books = books.filter((book) => book.reading === (reading === '1'));
+    }
+
+    if (['0', '1'].includes(finished)) {
+      books = books.filter((book) => book.finished === (finished === '1'));
+    }
+
     return response.success({
-      books: db.books.map((book) => ({
+      books: books.map((book) => ({
         id: book.id,
         name: book.name,
         publisher: book.publisher,
