@@ -1,3 +1,87 @@
+import db from './db.js';
+import Book from './models/Book.js';
+
+export const books = {
+  create: handler((response, request) => {
+    try {
+      const book = Book.new(
+        typeof request.payload === 'string' ? JSON.parse(request.payload) : request.payload,
+      );
+
+      db.books.push(book);
+
+      return response.success(
+        {
+          bookId: book.id,
+        },
+        'Buku berhasil ditambahkan',
+        201,
+      );
+    } catch (error) {
+      return response.fail(`Gagal menambahkan buku. ${error.message}`);
+    }
+  }),
+
+  all: handler((response) => {
+    return response.success({
+      books: db.books.map((book) => ({
+        id: book.id,
+        name: book.name,
+        publisher: book.publisher,
+      })),
+    });
+  }),
+
+  find: handler((response, request) => {
+    const id = request.params.bookId;
+    const book = db.books.find((book) => book.id === id);
+
+    if (!book) {
+      return response.fail('Buku tidak ditemukan', 404);
+    }
+
+    return response.success({ book });
+  }),
+
+  update: handler((response, request) => {
+    const id = request.params.bookId;
+    const book = db.books.find((book) => book.id === id);
+
+    if (!book) {
+      return response.fail('Gagal memperbarui buku. Id tidak ditemukan', 404);
+    }
+
+    try {
+      const validatedData = Book.validate(
+        typeof request.payload === 'string' ? JSON.parse(request.payload) : request.payload,
+      );
+
+      for (const property in validatedData) {
+        book[property] = validatedData[property];
+      }
+
+      book.touch();
+
+      return response.success('Buku berhasil diperbarui');
+    } catch (error) {
+      return response.fail(`Gagal memperbarui buku. ${error.message}`);
+    }
+  }),
+
+  delete: handler((response, request) => {
+    const id = request.params.bookId;
+    const bookIndex = db.books.findIndex((book) => book.id === id);
+
+    if (bookIndex === -1) {
+      return response.fail('Buku gagal dihapus. Id tidak ditemukan', 404);
+    }
+
+    db.books.splice(bookIndex, 1);
+
+    return response.success('Buku berhasil dihapus');
+  }),
+};
+
 /**
  * @callback Success
  * @param {string | Record<string, unknown>} dataOrMessage
