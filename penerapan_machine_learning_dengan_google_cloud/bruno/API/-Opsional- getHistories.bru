@@ -1,0 +1,31 @@
+meta {
+  name: -Opsional- getHistories
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/predict/histories
+  body: multipartForm
+  auth: none
+}
+
+tests {
+  test('response status code should have 200 value', () => {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  test('response body should be an object', () => {
+      const responseJson = res.getBody();
+      expect(responseJson).to.be.an('object');
+  });
+  
+  test('response body should have correct property and value', () => {
+      const responseJson = res.getBody();
+      expect(responseJson).to.ownProperty('status');
+      expect(responseJson.status).to.equals('success');
+      
+      expect(responseJson).to.ownProperty('data');
+      expect(responseJson.data).to.be.an('array');
+  })
+}

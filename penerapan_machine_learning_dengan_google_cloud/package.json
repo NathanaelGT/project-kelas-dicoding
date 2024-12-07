@@ -1,0 +1,20 @@
+{
+  "name": "penerapan_machine_learning_dengan_google_cloud",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-strip-types src/index.ts",
+    "dev": "tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^7.11.0",
+    "@hono/node-server": "^1.13.7",
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "dotenv": "^16.4.7",
+    "hono": "^4.6.13",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "tsx": "^4.7.1"
+  }
+}

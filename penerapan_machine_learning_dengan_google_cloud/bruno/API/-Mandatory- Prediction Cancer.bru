@@ -1,0 +1,37 @@
+meta {
+  name: -Mandatory- Prediction Cancer
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/predict
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  image: @file(files/cancer-1.png)
+}
+
+tests {
+  test('response code should 201', () => {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  test('response body should be an object', () => {
+      const payload = res.getBody();
+      expect(typeof payload).to.equal('object');
+  });
+  
+  test('response body should have correct data', () => {
+      const payload = res.getBody();
+  
+      expect(payload.status).to.equal('success');
+      expect(payload.message).to.equal('Model is predicted successfully');
+      expect(typeof payload.data).to.equal('object');
+      expect(typeof payload.data.id).to.equal('string');
+      expect(payload.data.result).to.equal('Cancer');
+      expect(payload.data.suggestion).to.equal('Segera periksa ke dokter!')
+  });
+}
