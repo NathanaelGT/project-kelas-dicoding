@@ -4,6 +4,12 @@ FROM node:22.11.0
 # Tetapkan direktori kerja
 WORKDIR /app
 
+# Salin file package
+COPY package*.json .
+
+# Instal dependensi
+RUN npm install --production
+
 # Salin seluruh kode proyek
 COPY . .
 
