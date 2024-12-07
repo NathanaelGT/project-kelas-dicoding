@@ -1,0 +1,35 @@
+meta {
+  name: -Mandatory- Prediction With Bad Request
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/predict
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  image: @file(files/bad-request.jpg)
+}
+
+tests {
+  test('response status code should have 400 value', () => {
+      expect(res.getStatus()).to.equal(400);
+  });
+  
+  test('response body should be an object', () => {
+      const responseJson = res.getBody();
+      expect(responseJson).to.be.an('object');
+  });
+  
+  test('response body should have correct property and value', () => {
+      const responseJson = res.getBody();
+      expect(responseJson).to.ownProperty('status');
+      expect(responseJson.status).to.equals('fail');
+  
+      expect(responseJson).to.ownProperty('message');
+      expect(responseJson.message).to.equals('Terjadi kesalahan dalam melakukan prediksi');
+  })
+}

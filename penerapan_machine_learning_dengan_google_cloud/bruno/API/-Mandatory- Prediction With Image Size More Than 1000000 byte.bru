@@ -1,0 +1,35 @@
+meta {
+  name: -Mandatory- Prediction With Image Size More Than 1000000 byte
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/predict
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  image: @file(files/more-than-1mb.jpg)
+}
+
+tests {
+  test('response status code should have 413 value', () => {
+      expect(res.getStatus()).to.equal(413);
+  });
+  
+  test('response body should be an object', () => {
+      const responseJson = res.getBody();
+      expect(responseJson).to.be.an('object');
+  });
+  
+  test('response body should have correct property and value', () => {
+      const responseJson = res.getBody();
+      expect(responseJson).to.ownProperty('status');
+      expect(responseJson.status).to.equals('fail');
+  
+      expect(responseJson).to.ownProperty('message');
+      expect(responseJson.message).to.equals('Payload content length greater than maximum allowed: 1000000');
+  })
+}
